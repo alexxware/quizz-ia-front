@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { QuizzService } from '../../../services/quizz.service';
 import { Router } from '@angular/router';
+import { Question } from '../../interfaces/question.interface';
 
 @Component({
   selector: 'app-quizz-page',
@@ -13,7 +14,7 @@ export class QuizzPageComponent {
   quizzService = inject(QuizzService);
   topicContent = this.quizzService.currentTop$;
 
-  isCorrect = signal(true);
+  isCorrect = signal(false);
   questions = this.quizzService.question;
   currentQuestionIndex = signal(0);
   currentQuestion = computed(() => {
@@ -49,6 +50,42 @@ export class QuizzPageComponent {
     {
       this.selectedAnswareId.set(id);
     }
+  }
+
+  getIdCorrectAnsware()
+  {
+    const quest: Question = this.currentQuestion()
+    const idCorrectAnsware = quest.idAnswareCorrect
+    return idCorrectAnsware;
+  }
+
+  validateAnsware()
+  {
+    this.isAnswered.set(true);
+    //correct answare
+    const idCorrectAnsware = this.getIdCorrectAnsware()
+    if (idCorrectAnsware === this.selectedAnswareId())
+    {
+      this.isCorrect.set(true);
+    }
+    else
+    {
+      this.isCorrect.set(false);
+    }
+  }
+
+  getContentCorrectAnsware()
+  {
+    const idCorrectAnsware = this.getIdCorrectAnsware();
+    for (let i = 0; i < this.answers().length; i++)
+    {
+      const answare = this.answers()[i];
+      if (idCorrectAnsware === answare.id)
+      {
+        return answare.text;
+      }
+    }
+    return "";
   }
 
 }
