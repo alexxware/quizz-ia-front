@@ -8,9 +8,9 @@
       @for (item of answers(); track item.id)
       {
         <div>
-        <input type="radio" [id]="item.id" name="respuesta" [value]="item.text" class="hidden peer">
+        <input type="radio" [id]="item.id" name="respuesta" [value]="item.text" class="hidden peer" (change)="selectedAnswer(item.id)" [checked]="selectedAnswareId() === item.id">
 
-        <label for="answer.id" class="block p-5 border-2 border-gray-300 rounded-xl cursor-pointer transition duration-300 hover:bg-purple-950 hover:border-purple-400 text-center font-medium peer-checked:border-purple-600 peer-checked:ring-2 peer-checked:ring-purple-500">
+        <label [for]="item.id" class="block p-5 border-2 border-gray-300 rounded-xl cursor-pointer transition duration-300 hover:bg-purple-950 hover:border-purple-400 text-center font-medium peer-checked:border-purple-600 peer-checked:ring-2 peer-checked:ring-purple-500">
             {{item.text}}
         </label>
       </div>
@@ -28,25 +28,28 @@
     </div>
   </div>
 </section>
-
-<section class="flex flex-col w-full py-10 items-center">
-    <div class="card text-neutral-content w-96" [class]="isCorrect() ? 'bg-emerald-50 border-emerald-300' : 'bg-red-200 border-red-400'">
-      <div class="card-body items-center text-center">
-        <h4 class="text-xl font-extrabold mb-2" [class]="isCorrect() ? 'text-emerald-700' : 'text-red-700'">
-          @if (true) {
-            ¡Respuesta Correcta! 🎉
-          } @else {
-            ¡Respuesta Incorrecta! 😔
-          }
-        </h4>
-        <p class="card-title text-black">Explicación</p>
-        <p class="text-black">{{"currentQuestion().explication"}} </p>
-
+@if (isAnswered())
+{
+  <section class="flex flex-col w-full py-10 items-center">
+  <div class="card text-neutral-content w-96" [class]="isCorrect() ? 'bg-emerald-50 border-emerald-300' : 'bg-red-200 border-red-400'">
+    <div class="card-body items-center text-center">
+      <h4 class="text-xl font-extrabold mb-2" [class]="isCorrect() ? 'text-emerald-700' : 'text-red-700'">
         @if (true) {
-          <p class="text-gray-700 mt-2">
-            La respuesta correcta era: <span class="font-bold">{{ "currentQuestion()![getCorrectAnswerKey()]" }}</span>
-          </p>
+          ¡Respuesta Correcta! 🎉
+        } @else {
+          ¡Respuesta Incorrecta! 😔
         }
-      </div>
+      </h4>
+      <p class="card-title text-black">Explicación</p>
+      <p class="text-black">{{"currentQuestion().explication"}} </p>
+
+      @if (true) {
+        <p class="text-gray-700 mt-2">
+          La respuesta correcta era: <span class="font-bold">{{ "currentQuestion()![getCorrectAnswerKey()]" }}</span>
+        </p>
+      }
     </div>
-  </section>
+  </div>
+</section>
+}
+

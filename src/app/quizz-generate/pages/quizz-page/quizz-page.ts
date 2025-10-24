@@ -20,6 +20,9 @@ export class QuizzPageComponent {
     return this.questions[this.currentQuestionIndex()];
   });
 
+  selectedAnswareId = signal<string | null>(null);
+  isAnswered = signal(false);
+
   ngOnInit()
   {
     if (this.topicContent() === '')
@@ -39,5 +42,13 @@ export class QuizzPageComponent {
       { id: currentQ.idAnsware4, text: currentQ.answare4 },
     ];
   });
+
+  selectedAnswer(id: string)
+  {
+    if (!this.isAnswered())
+    {
+      this.selectedAnswareId.set(id);
+    }
+  }
 
 }
